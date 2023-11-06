@@ -4,9 +4,10 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build-exec:win": "electron-builder --win --x64"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/dera-/electron-test",
   "keywords": [
     "Electron",
     "quick",
@@ -17,6 +18,10 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^27.0.3"
+    "electron": "^27.0.3",
+    "electron-builder": "^24.6.4"
+  },
+  "dependencies": {
+    "update-electron-app": "^3.0.0"
   }
 }
