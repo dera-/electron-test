@@ -4,11 +4,11 @@ const path = require('node:path');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 
-Object.defineProperty(app, 'isPackaged', {
-  get() {
-    return true;
-  }
-});
+// Object.defineProperty(app, 'isPackaged', {
+//   get() {
+//     return true;
+//   }
+// });
 
 // アップデートに関する情報をログファイルへ出力
 autoUpdater.logger = log;
@@ -91,18 +91,14 @@ autoUpdater.on("error", () => {
 });
 
 // アップデートのダウンロードが完了
-autoUpdater.on('update-downloaded', (info) => {
-  const dialogOpts = {
-    type: 'info',
-    buttons: ['更新して再起動', 'あとで'],
-    message: 'アップデート',
-    detail: '新しいバージョンをダウンロードしました。再起動して更新を適用しますか？'
+autoUpdater.on('update-downloaded', async() => {
+  const returnValue = await dialog.showMessageBox({
+    type: "info",
+    message: "アップデートあり",
+    detail: "再起動してインストールできます。",
+    buttons: ["再起動", "後で"],
+  });
+  if (returnValue.response === 0) {
+    autoUpdater.quitAndInstall();  // アプリを終了してインストール
   }
-
-  // ダイアログを表示しすぐに再起動するか確認
-  dialog.showMessageBox(mainWin, dialogOpts).then((returnValue) => {
-    if (returnValue.response === 0){
-      autoUpdater.quitAndInstall()
-    }
-  })
 });
