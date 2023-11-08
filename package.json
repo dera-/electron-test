@@ -1,10 +1,10 @@
 {
   "name": "electron-quick-start",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "electron . --develop --debug-mode",
+    "start": "electron .",
     "build": "electron-builder --win --x64 --publish never",
     "publish": "electron-builder --win --x64 --publish always"
   },
@@ -29,29 +29,12 @@
   },
   "build": {
     "appId": "electron-quick-start",
-    "files": [
-      "package.json",
-      "package-lock.json",
-      "main.js",
-      "index.html",
-      "preload.js",
-      "renderer.js",
-      "styles.css",
-      "icon.png"
-    ],
     "win": {
       "icon": "build/style/img/icon.png",
       "publish": {
         "provider": "github",
         "owner": "dera-"
-      },
-      "target": {
-        "target": "nsis"
       }
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
     }
   }
 }
