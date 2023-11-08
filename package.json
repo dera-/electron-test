@@ -4,8 +4,9 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "build-exec:win": "electron-builder --win --x64"
+    "start": "electron . --develop --debug-mode",
+    "build": "electron-builder --win --x64 --publish never",
+    "publish": "electron-builder --win --x64 --publish always"
   },
   "repository": "https://github.com/dera-/electron-test",
   "keywords": [
@@ -25,5 +26,32 @@
     "electron-log": "^5.0.0",
     "electron-updater": "^6.1.4",
     "update-electron-app": "^3.0.0"
+  },
+  "build": {
+    "appId": "electron-quick-start",
+    "files": [
+      "package.json",
+      "package-lock.json",
+      "main.js",
+      "index.html",
+      "preload.js",
+      "renderer.js",
+      "styles.css",
+      "icon.png"
+    ],
+    "win": {
+      "icon": "build/style/img/icon.png",
+      "publish": {
+        "provider": "github",
+        "owner": "dera-"
+      },
+      "target": {
+        "target": "nsis"
+      }
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }

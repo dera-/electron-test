@@ -4,6 +4,12 @@ const path = require('node:path');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 
+Object.defineProperty(app, 'isPackaged', {
+  get() {
+    return true;
+  }
+});
+
 // アップデートに関する情報をログファイルへ出力
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
@@ -33,7 +39,7 @@ app.whenReady().then(() => {
   createWindow();
 
   // アップデートをチェック
-  autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.checkForUpdates();
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
@@ -86,4 +92,5 @@ autoUpdater.on('update-downloaded', (info) => {
 // エラーが発生
 autoUpdater.on('error', (err) => {
   log.error(process.pid, err);
+  console.error(err);
 })
