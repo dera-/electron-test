@@ -1,14 +1,14 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, dialog } = require('electron');
 const path = require('node:path');
 const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
 
-// Object.defineProperty(app, 'isPackaged', {
-//   get() {
-//     return true;
-//   }
-// });
+Object.defineProperty(app, 'isPackaged', {
+  get() {
+    return true;
+  }
+});
 
 // アップデートに関する情報をログファイルへ出力
 autoUpdater.logger = log;
@@ -65,14 +65,31 @@ app.on('window-all-closed', function () {
 autoUpdater.on('checking-for-update', () => {
   log.info(process.pid, 'checking-for-update...');
 })
-// アップデートが見つかった
-autoUpdater.on('update-available', (ev, info) => {
-  log.info(process.pid, 'Update available.');
-})
-// アップデートがなかった（最新版だった）
-autoUpdater.on('update-not-available', (ev, info) => {
-  log.info(process.pid, 'Update not available.');
-})
+
+// アップデートがあるとき
+autoUpdater.on("update-available", () => {
+  dialog.showMessageBox({
+    message: "アップデートがあります",
+    buttons: ["OK"],
+  });
+});
+
+// アップデートがないとき
+autoUpdater.on("update-not-available", () => {
+  dialog.showMessageBox({
+    message: "アップデートはありません",
+    buttons: ["OK"],
+  });
+});
+
+// エラーが発生したとき
+autoUpdater.on("error", () => {
+  dialog.showMessageBox({
+    message: "アップデートエラーが起きました",
+    buttons: ["OK"],
+  });
+});
+
 // アップデートのダウンロードが完了
 autoUpdater.on('update-downloaded', (info) => {
   const dialogOpts = {
@@ -89,8 +106,3 @@ autoUpdater.on('update-downloaded', (info) => {
     }
   })
 });
-// エラーが発生
-autoUpdater.on('error', (err) => {
-  log.error(process.pid, err);
-  console.error(err);
-})
