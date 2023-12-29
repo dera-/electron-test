@@ -23,7 +23,7 @@
     "electron-builder": "^24.6.4"
   },
   "dependencies": {
-    "electron-log": "^5.0.0",
+    "electron-log": "^5.0.3",
     "electron-updater": "^6.1.4",
     "update-electron-app": "^3.0.0"
   },
