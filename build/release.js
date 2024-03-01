@@ -13,12 +13,12 @@ const targetFilePaths = [`${name} Setup ${version}.exe`, `${name} Setup ${versio
 		console.error(`Not Found: ${filePath}`);
 		process.exit(1);
 	}
-	return filePath;
+	return `"${filePath}"`;
 });
 
 const changelog = fs.readFileSync(path.resolve(__dirname, "..", "CHANGELOG.md")).toString();
-const matches = changelog.match(new RegExp(`## ${version}\n([^]*)\n## \\d+\.\\d+\.\\d+`));
+const matches = changelog.match(new RegExp(`## ${version}(.*?)(?=## \\d|\\Z)`, 'gs'));
 
 sh.exec(`echo ${process.env.GITHUB_CLI_TOKEN} | gh auth login --with-token -h github.com`);
-sh.exec(`gh release create v${version} -t Release v${version} -n ${matches[1]} --target main`);
-sh.exec(`gh release upload v${version} ${targetFilePaths.join(" ")}`);
+sh.exec(`gh release create "v${version}" -t "Release v${version}" -n "${matches[0].replace(`## ${version}`, '').trim()}" --target "main"`);
+sh.exec(`gh release upload "v${version}" ${targetFilePaths.join(" ")}`);
