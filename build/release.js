@@ -1,6 +1,7 @@
 const sh = require("shelljs");
 const path = require("path");
 const fs = require("fs");
+const os = require("os")
 
 const distDirPath = path.resolve(__dirname, "..", "dist");
 const packageJson = require(path.resolve(__dirname, "..", "package.json"));
@@ -18,7 +19,9 @@ const targetFilePaths = [`${name} Setup ${version}.exe`, `${name} Setup ${versio
 
 const changelog = fs.readFileSync(path.resolve(__dirname, "..", "CHANGELOG.md")).toString();
 const matches = changelog.match(new RegExp(`## ${version}(.*?)(?=## \\d|\\Z)`, 'gs'));
+const tmpChangelogPath = path.join(os.tmpdir(), `changelog-${Date.now()}.md`);
+fs.writeFileSync(tmpChangelogPath, matches[0].replace(`## ${version}`, '').trim());
 
 sh.exec(`echo ${process.env.GITHUB_CLI_TOKEN} | gh auth login --with-token -h github.com`);
-sh.exec(`gh release create "v${version}" -t "Release v${version}" -n "${matches[0].replace(`## ${version}`, '').replace("\n", "\\n").trim()}" --target "main"`);
+sh.exec(`gh release create "v${version}" -t "Release v${version}" --target "main" -F "${tmpChangelogPath}"`);
 sh.exec(`gh release upload "v${version}" ${targetFilePaths.join(" ")}`);

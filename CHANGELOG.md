@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.0.14
+* hoge4
+* fuga4
+* hogefuga44
+
 ## 1.0.13
 * hoge3
 * fuga3
