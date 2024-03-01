@@ -20,5 +20,5 @@ const changelog = fs.readFileSync(path.resolve(__dirname, "..", "CHANGELOG.md"))
 const matches = changelog.match(new RegExp(`## ${version}(.*?)(?=## \\d|\\Z)`, 'gs'));
 
 sh.exec(`echo ${process.env.GITHUB_CLI_TOKEN} | gh auth login --with-token -h github.com`);
-sh.exec(`gh release create "v${version}" -t "Release v${version}" -n "${matches[0].replace(`## ${version}`, '').trim()}" --target "main"`);
+sh.exec(`gh release create "v${version}" -t "Release v${version}" -n "${matches[0].replace(`## ${version}`, '').replace("\n", "\\n").trim()}" --target "main"`);
 sh.exec(`gh release upload "v${version}" ${targetFilePaths.join(" ")}`);
